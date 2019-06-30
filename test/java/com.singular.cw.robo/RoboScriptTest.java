@@ -11,136 +11,101 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class RoboScriptTest {
 
     @Test
-    public void executeWithNoMovement() {
-        String grid = RoboScript.execute("");
-        assertThat(grid, equalTo("*"));
+    public void highlightEmpty() {
+        final String highlight = RoboScript.highlight("");
+        assertThat(highlight, equalTo(""));
     }
 
     @Test
-    public void executeWithSingleF() {
-        String grid = RoboScript.execute("F");
-        assertThat(grid, equalTo("**"));
+    public void highlightSingleF() {
+        final String highlight = RoboScript.highlight("F");
+        assertThat(highlight, equalTo("<span style=\"color: pink\">F</span>"));
     }
 
     @Test
-    public void executeWithAboutTurnWithRAndF() {
-        String grid = RoboScript.execute("RRF");
-        assertThat(grid, equalTo("**"));
+    public void highlightMultipleF() {
+        final String highlight = RoboScript.highlight("FFF");
+        assertThat(highlight, equalTo("<span style=\"color: pink\">FFF</span>"));
     }
 
     @Test
-    public void executeWithAboutTurnWithLAndF() {
-        String grid = RoboScript.execute("LLF");
-        assertThat(grid, equalTo("**"));
+    public void highlightSingleL() {
+        final String highlight = RoboScript.highlight("L");
+        assertThat(highlight, equalTo("<span style=\"color: red\">L</span>"));
     }
 
     @Test
-    public void executeWithFourF() {
-        String grid = RoboScript.execute("FFFF");
-        assertThat(grid, equalTo("*****"));
+    public void highlightMultipleL() {
+        final String highlight = RoboScript.highlight("LLL");
+        assertThat(highlight, equalTo("<span style=\"color: red\">LLL</span>"));
     }
 
     @Test
-    public void drawASquare() {
-        String grid = RoboScript.execute("FFFFLFFFFLFFFFLFFFF");
-        String expected =   "*****\r\n" +
-                            "*   *\r\n" +
-                            "*   *\r\n" +
-                            "*   *\r\n" +
-                            "*****";
-        assertThat(grid, equalTo(expected));
+    public void highlightSingleR() {
+        final String highlight = RoboScript.highlight("R");
+        assertThat(highlight, equalTo("<span style=\"color: green\">R</span>"));
     }
 
     @Test
-    public void drawABiggerSquare() {
-        String grid = RoboScript.execute("FFFFFLFFFFFLFFFFFLFFFFFL");
-        String expected = "******\r\n" +
-                          "*    *\r\n" +
-                          "*    *\r\n" +
-                          "*    *\r\n" +
-                          "*    *\r\n" +
-                          "******";
-        assertThat(grid, equalTo(expected));
+    public void highlightMultipleR() {
+        final String highlight = RoboScript.highlight("RRR");
+        assertThat(highlight, equalTo("<span style=\"color: green\">RRR</span>"));
     }
 
     @Test
-    public void drawALoop() {
-        String grid = RoboScript.execute("LFFFFFRFFFRFFFRFFFFFFF");
-        String expected = "    ****\r\n" +
-                          "    *  *\r\n" +
-                          "    *  *\r\n" +
-                          "********\r\n" +
-                          "    *   \r\n" +
-                          "    *   ";
-        assertThat(grid, equalTo(expected));
+    public void highlightSingleNumber() {
+        final String highlight = RoboScript.highlight("1");
+        assertThat(highlight, equalTo("<span style=\"color: orange\">1</span>"));
     }
 
     @Test
-    public void reverseASquareAndSecondPass() {
-        String grid = RoboScript.execute("RFFFFRFFFFRFFFFRFFFFRFFFFRFFFFRFFFF");
-        String expected =   "*****\r\n" +
-                            "*   *\r\n" +
-                            "*   *\r\n" +
-                            "*   *\r\n" +
-                            "*****";
-        assertThat(grid, equalTo(expected));
+    public void highlightMultiNumber() {
+        final String highlight = RoboScript.highlight("1234567890");
+        assertThat(highlight, equalTo("<span style=\"color: orange\">1234567890</span>"));
     }
 
     @Test
-    public void cross() {
-        String grid = RoboScript.execute("FFFFRRFFLFFFF");
-        String expected =   "*****\r\n" +
-                            "  *  \r\n" +
-                            "  *  \r\n" +
-                            "  *  \r\n" +
-                            "  *  ";
-        assertThat(grid, equalTo(expected));
+    public void highlightMixedTypes() {
+        final String highlight = RoboScript.highlight("(LL12(R34LF)L56F(78F)F9LR0)");
+        assertThat(highlight, equalTo("(<span style=\"color: red\">LL</span>" +
+                "<span style=\"color: orange\">12</span>" +
+                "(<span style=\"color: green\">R</span>" +
+                "<span style=\"color: orange\">34</span>" +
+                "<span style=\"color: red\">L</span>" +
+                "<span style=\"color: pink\">F</span>" +
+                ")<span style=\"color: red\">L</span>" +
+                "<span style=\"color: orange\">56</span>" +
+                "<span style=\"color: pink\">F</span>" +
+                "(<span style=\"color: orange\">78</span>" +
+                "<span style=\"color: pink\">F</span>" +
+                ")<span style=\"color: pink\">F</span>" +
+                "<span style=\"color: orange\">9</span>" +
+                "<span style=\"color: red\">L</span>" +
+                "<span style=\"color: green\">R</span>" +
+                "<span style=\"color: orange\">0</span>)"));
     }
 
     @Test
-    public void commandWithNumSimple() {
-        String grid = RoboScript.execute("F1");
-        assertThat(grid, equalTo("**"));
+    public void fromDescOne() {
+        final String highlight = RoboScript.highlight("F3RF5LF7");
+        assertThat(highlight, equalTo("<span style=\"color: pink\">F</span>" +
+                "<span style=\"color: orange\">3</span>" +
+                "<span style=\"color: green\">R</span>" +
+                "<span style=\"color: pink\">F</span>" +
+                "<span style=\"color: orange\">5</span>" +
+                "<span style=\"color: red\">L</span>" +
+                "<span style=\"color: pink\">F</span>" +
+                "<span style=\"color: orange\">7</span>"));
     }
 
     @Test
-    public void commandMultiple() {
-        String grid = RoboScript.execute("F4");
-        assertThat(grid, equalTo("*****"));
-    }
-
-    @Test
-    public void drawALoopWithNums() {
-        String grid = RoboScript.execute("LF5RF3RF3RF7");
-        String expected = "    ****\r\n" +
-                          "    *  *\r\n" +
-                          "    *  *\r\n" +
-                          "********\r\n" +
-                          "    *   \r\n" +
-                          "    *   ";
-        assertThat(grid, equalTo(expected));
-    }
-
-    @Test
-    public void spiral() {
-        String grid = RoboScript.execute("F2LF3LF4LF5LF6LF7LF8LF9LF10");
-        String expected = "*********  \r\n" +
-                          "*       *  \r\n" +
-                          "* ***** *  \r\n" +
-                          "* *   * *  \r\n" +
-                          "* *   * *  \r\n" +
-                          "* * *** *  \r\n" +
-                          "* *     *  \r\n" +
-                          "* *******  \r\n" +
-                          "*          \r\n" +
-                          "***********";
-        assertThat(grid, equalTo(expected));
-    }
-
-    @Test
-    public void longTrail() {
-        String grid = RoboScript.execute("F22");
-        String expected = "***********************";
-        assertThat(grid, equalTo(expected));
+    public void fromDescTwo() {
+        final String highlight = RoboScript.highlight("FFFR345F2LL");
+        assertThat(highlight, equalTo("<span style=\"color: pink\">FFF</span>" +
+                "<span style=\"color: green\">R</span>" +
+                "<span style=\"color: orange\">345</span>" +
+                "<span style=\"color: pink\">F</span>" +
+                "<span style=\"color: orange\">2</span>" +
+                "<span style=\"color: red\">LL</span>"));
     }
 }
