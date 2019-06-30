@@ -1,2 +1,3 @@
-# roboscript-one
-Part one of the Roboscript exercises 
+# RoboScript One
+
+Part one of the RoboScript exercises. The first is for highlighting. 
